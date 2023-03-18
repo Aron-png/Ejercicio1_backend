@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from . models import CategoriaPlato, Plato, Ingrediente, Paso
+from . models import CategoriaPlato, Plato, Ingrediente, Paso, Usuario
 import json
 
 
@@ -169,6 +169,52 @@ def Pasos(request):
     else:
         dictError = {
             "error":"Tipo de peticion no existe"
+        }
+        strError = json.dumps(dictError)
+        return HttpResponse(strError)
+
+
+##http://127.0.0.1:8000/ejercicio1/login
+@csrf_exempt
+def login(request):
+    if request.method == "POST":
+        #La data q obtenemos de registrarse en forma de String "request.body".
+        dictDataRequest = json.loads(request.body)#convertir a diccionario
+        email = dictDataRequest["email"]
+        password = dictDataRequest["password"]
+        
+        ListaUsuariosQuerySet = Usuario.objects.all()
+        
+        evento = 0#Suponemos que la contrasea o usuario esta mal ingresado
+        UsuarioSeleccionado = []
+        for i in ListaUsuariosQuerySet:
+            UsuarioSeleccionado.append(
+                {
+                "valor":i.nombre
+                }
+            )
+            if email == i.email and password == i.contra:
+                evento = evento + 1
+
+        if evento == 1:
+            #Correcto
+            dictOk = {
+                "error" : "",
+                "usuario": UsuarioSeleccionado
+            }
+            return HttpResponse(json.dumps(dictOk))
+        else:
+            #Error login
+            dictOk = {
+                "error" : "No existe el usuario o password"
+            }
+            strError = json.dumps(dictOk)
+            return HttpResponse(strError)
+
+    else:
+        #Error en caso que la peticion no sea post
+        dictError = {
+            "error" : "Tipo de peticion no existe"
         }
         strError = json.dumps(dictError)
         return HttpResponse(strError)

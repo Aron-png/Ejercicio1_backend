@@ -5,5 +5,6 @@ urlpatterns = [
     path("plato",views.obtenerPlato),
     path("categoria",views.obtenerCategorias),
     path("ingredientes",views.ingredientes),
-    path("pasos",views.Pasos)
+    path("pasos",views.Pasos),
+    path("login",views.login)
 ]

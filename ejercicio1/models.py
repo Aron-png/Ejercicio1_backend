@@ -39,5 +39,12 @@ class Paso(models.Model):
     plato = models.ForeignKey(Plato, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.plato}-{self.numero_paso}"
+
+class Usuario(models.Model):
+    email = models.EmailField(unique=True)
+    contra = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=255)
+    def __str__(self):
+        return self.nombre
     
 
