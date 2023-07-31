@@ -7,6 +7,7 @@ urlpatterns = [
     path("ingredientes",views.ingredientes),
     path("pasos",views.Pasos),
     path("login",views.login),
+    path("record",views.record),
     path("registrarCategoria",views.registrarCategoria),
     path("modificarCategoria",views.modificarCategoria),
     path("eliminarCategoria",views.eliminarCategoria),

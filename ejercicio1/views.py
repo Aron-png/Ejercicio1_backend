@@ -196,15 +196,12 @@ def login(request):
         ListaUsuariosQuerySet = Usuario.objects.all()
         
         evento = 0#Suponemos que la contrasea o usuario esta mal ingresado
-        UsuarioSeleccionado = []
+        UsuarioSeleccionado = "nada"
         for i in ListaUsuariosQuerySet:
-            UsuarioSeleccionado.append(
-                {
-                "valor":i.nombre
-                }
-            )
+            
             if email == i.email and password == i.contra:
                 evento = evento + 1
+                UsuarioSeleccionado = i.nombre
 
         if evento == 1:
             #Correcto
@@ -228,6 +225,36 @@ def login(request):
         }
         strError = json.dumps(dictError)
         return HttpResponse(strError)
+'''
+Instalar Postman
+http://127.0.0.1:8000/ejercicio1/record
+{
+    "nombre":"aaron2.0",
+    "email":"aarqe",
+    "contra":"qwer"
+}
+'''
+@csrf_exempt
+def record(request):
+    if request.method != "POST":
+        dictError = {
+            "error":"Tipo de peticion no valida"
+        }
+        strError = json.dumps(dictError)
+        return HttpResponse(strError)
+    dictRecord = json.loads(request.body)
+    
+    email = dictRecord["email"]
+    contra = dictRecord["contra"]
+    nombre = dictRecord["nombre"]
+
+    cat = Usuario(email=email, contra=contra, nombre=nombre)
+    cat.save()
+    dictOK = {
+        "error" : ""
+    }
+        #Queremos hacer lo contrario
+    return HttpResponse(json.dumps(dictOK))
 '''
 Instalar Postman
 http://127.0.0.1:8000/ejercicio1/registrarCategoria
